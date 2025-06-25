@@ -6,6 +6,7 @@ import ctypes
 import ctypes.wintypes
 from binder import KeySpammer
 from profiles import load_profiles, add_or_update_profile, delete_profile, get_profile
+import webbrowser
 
 help_text_ru = '''
 Добро пожаловать в KeySpammer!
@@ -198,6 +199,20 @@ class App(ctk.CTk):
         self.spam_button = ctk.CTkButton(self.settings_frame, command=self.toggle_spam)
         self.spam_button.pack(pady=10)
 
+        # --- Кнопка и надпись "Мой бусти" в правом нижнем углу ---
+        self.boosty_frame = ctk.CTkFrame(self.settings_frame, fg_color="transparent")
+        self.boosty_frame.place(relx=1.0, rely=1.0, anchor="se", x=-10, y=-10)  # x=-10, y=-10 — небольшой отступ от края
+        self.boosty_label = ctk.CTkLabel(self.boosty_frame, text="Мой Boosty")
+        self.boosty_label.pack(side="top", anchor="e")
+        self.boosty_button = ctk.CTkButton(
+            self.boosty_frame,
+            text="Поддержать",
+            width=120,
+            command=lambda: webbrowser.open_new_tab("https://boosty.to/gamemor")
+        )
+        self.boosty_button.pack(side="top", anchor="e", pady=5)
+
+
         keyboard.hook(self.on_key_event)
         self.update_language()
 
@@ -220,6 +235,8 @@ class App(ctk.CTk):
             self.spam_button.configure(text="Спам" if not hasattr(self, "is_spamming") or not self.is_spamming else "Остановить")
             self.lang_button.configure(text="EN")
             self.help_button.configure(text="Помощь")
+            self.boosty_label.configure(text="Мой бусти")
+            self.boosty_button.configure(text="Поддержать")
         else:
             self.profiles_label.configure(text="Profiles")
             self.add_profile_button.configure(text="Add")
@@ -235,6 +252,8 @@ class App(ctk.CTk):
             self.spam_button.configure(text="Spam" if not hasattr(self, "is_spamming") or not self.is_spamming else "Stop")
             self.lang_button.configure(text="RU")
             self.help_button.configure(text="Help")
+            self.boosty_label.configure(text="My Boosty")
+            self.boosty_button.configure(text="Support")
 
     def toggle_language(self):
         self.lang = "en" if self.lang == "ru" else "ru"
